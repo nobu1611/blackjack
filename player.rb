@@ -5,30 +5,28 @@ require_relative 'deck'
 
 # プレイヤークラス
 class Player
-  attr_reader :cards, :score
+  attr_reader :hand_cards
 
   def initialize
-    @cards = []
+    @hand_cards = []
   end
 
   # デッキからカードを引く
   def draw(deck, number)
-    @cards << deck.draw(number)
-    @cards.flatten!
+    @hand_cards << deck.draw(number)
+    @hand_cards.flatten!.to_s
   end
 
   # 手札の点数を計算する
   def hand_score
     score = 0
 
-    cards.each do |card|
+    hand_cards.each do |card|
       score += card.score
     end
-    # Aを1点あるいは11点のどちらかで扱うようにプログラムを修正しましょう。Aはカードの合計値が21以内で最大となる方で数えるようにします。
+    # Aを1点あるいは11点のどちらかで扱うようにプログラムを修正。Aはカードの合計値が21以内で最大となる方で数える。
     # ただし、カードの合計値が21を超えてしまう場合は、Aを1点として扱います
-    if score > 21 && cards.any? { |card| card.number == 'A' }
-      score -= 10
-    end
+    score -= 10 if score > 21 && hand_cards.any? { |card| card.number == 'A' }
     score
   end
 
